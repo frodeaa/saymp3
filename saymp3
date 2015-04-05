@@ -15,6 +15,8 @@ function usage {
 	cat <<EOF
 usage: ${me} [-v voice] [-r rate] [-V quality] [-o output] [file...]
 
+create mp3 audio files from text input
+
 options:
   -v, -v=alex        specify the voice to be used.
   -r, -r=200         speech rate to be used, in words per minute.
