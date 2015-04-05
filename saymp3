@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# This script use the OSX say command to convert input text to mp3
+# The script requires lame and mp3val to be installed
+#
+#  $ brew install lame mp3val
+#
+# Example:
+#
+#  $ cat book.txt | saymp3 -v alex -r 200 -o book.mp3
+
+me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
+
+function usage() {
+	cat <<EOF
+usage: ${me} [-v voice] [-r rate] [-V quality] [-o output]
+
+options:
+  -v, -v=alex        specify the voice to be used.
+  -r, -r=200         speech rate to be used, in words per minute.
+  -V, -V=4           quality settings for VBR, 0=highest, 9=smaller file
+  -o, o=out.mp3      output filename
+  -h                 show help
+EOF
+	exit 1
+}
+
+set -e
+
+voice="alex"
+rate="200"
+quality="4"
+filename="out.mp3"
+
+while getopts "hv:r:V:o:" opt; do
+	case ${opt} in
+		h)
+			usage
+			;;
+		v)
+			voice=${OPTARG}
+			;;
+		r)
+			rate=${OPTARG}
+			;;
+		V)
+			quality=${OPTARG}
+			;;
+		o)
+			filename=${OPTARG}
+			;;
+		:)
+			echo "option -$OPTARG requires an argument." >&2
+			exit 1
+		;;
+	esac
+done
+
+# for line in file
+# say line to aiff
+# lame -q 0 -v -V <quality> file.aiff file.mp3
