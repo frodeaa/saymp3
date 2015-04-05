@@ -9,7 +9,7 @@ A text to mp3 tool
     options:
       -s, -s alex        specify the voice to be used.
       -r, -r 175         speech rate to be used, in words per minute.
-      -q, -q "-q 0 --abr 56 -mm"           
+      -q, -q "-q 0 -v -V 9 -mm -B 32"
                          quality settings, see lame options (lame --longhelp)
       -o, -o out.mp3     output filename
       -v                 show version
