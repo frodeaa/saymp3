@@ -7,17 +7,18 @@ A text to mp3 tool
     create mp3 audio files from text input
 
     options:
-      -s, -s=alex        specify the voice to be used.
-      -r, -r=175         speech rate to be used, in words per minute.
-      -q, -q=4           quality settings for VBR, 0=highest, 9=smaller file
-      -o, o=out.mp3      output filename
+      -s, -s alex        specify the voice to be used.
+      -r, -r 175         speech rate to be used, in words per minute.
+      -q, -q "-q 0 --abr 56 -mm"           
+                         quality settings, see lame options (lame --longhelp)
+      -o, -o out.mp3     output filename
       -v                 show version
       -h                 show help
 
 
 ## Example
 
-    cat book.txt | saymp3 -s=alex r=175 -q=4 -o book.mp3
+    cat book.txt | saymp3 -s alex -r 175 -o book.mp3
 
 ## Install
 

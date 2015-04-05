@@ -12,6 +12,11 @@
 me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 version="${me} version 0.1.0"
 
+voice="alex"
+rate="175"
+quality="-q 0 --abr 56 -mm"
+filename="out.mp3"
+
 function usage {
 	cat <<EOF
 usage: ${me} [-s voice] [-r rate] [-q quality] [-o output] [file...]
@@ -19,10 +24,11 @@ usage: ${me} [-s voice] [-r rate] [-q quality] [-o output] [file...]
 create mp3 audio files from text input
 
 options:
-  -s, -s=alex        specify the voice to be used.
-  -r, -r=175         speech rate to be used, in words per minute.
-  -q, -q=4           quality settings for VBR, 0=highest, 9=smaller file
-  -o, o=out.mp3      output filename
+  -s, -s ${voice}        specify the voice to be used.
+  -r, -r ${rate}         speech rate to be used, in words per minute.
+  -q, -q "${quality}"
+                     quality settings, see lame options (lame --longhelp)
+  -o, -o ${filename}     output filename
   -v                 show version
   -h                 show help
 EOF
@@ -38,11 +44,6 @@ set -e
 requires_command say
 requires_command lame
 requires_command mp3val
-
-voice="alex"
-rate="200"
-quality="4"
-filename="out.mp3"
 
 while getopts "hvs:r:q:o:" opt; do
 	case ${opt} in
@@ -80,7 +81,7 @@ function tts_mp3 {
 	local input="$1"
 	local output="$2"
 	say --voice="${voice}" --rate="${rate}" --output-file="${output}.aiff" "${input}"
-	lame --quiet -q 0 -v -V "${quality}" "${output}.aiff" "${output}" && rm "${output}.aiff"
+	lame --quiet ${quality} "${output}.aiff" "${output}" && rm "${output}.aiff"
 }
 
 k=0
