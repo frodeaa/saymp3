@@ -8,7 +8,7 @@ A text to mp3 tool
 
     options:
       -s, -s=alex        specify the voice to be used.
-      -r, -r=200         speech rate to be used, in words per minute.
+      -r, -r=175         speech rate to be used, in words per minute.
       -q, -q=4           quality settings for VBR, 0=highest, 9=smaller file
       -o, o=out.mp3      output filename
       -v                 show version
@@ -17,7 +17,7 @@ A text to mp3 tool
 
 ## Example
 
-    cat book.txt | saymp3 -s=alex r=200 -q=4 -o book.mp3
+    cat book.txt | saymp3 -s=alex r=175 -q=4 -o book.mp3
 
 ## Install
 

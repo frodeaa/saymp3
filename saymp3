@@ -7,7 +7,7 @@
 #
 # Example:
 #
-#  $ cat book.txt | saymp3 -s alex -r 200 -o book.mp3
+#  $ cat book.txt | saymp3 -s alex -r 175 -o book.mp3
 
 me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 version="${me} version 0.1.0"
@@ -20,7 +20,7 @@ create mp3 audio files from text input
 
 options:
   -s, -s=alex        specify the voice to be used.
-  -r, -r=200         speech rate to be used, in words per minute.
+  -r, -r=175         speech rate to be used, in words per minute.
   -q, -q=4           quality settings for VBR, 0=highest, 9=smaller file
   -o, o=out.mp3      output filename
   -v                 show version
