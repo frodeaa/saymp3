@@ -72,6 +72,7 @@ do
 	k=$((k + 1))
 done < "${1:-/dev/stdin}"
 
+rm "${filename}"
 find "${tmp_dir}" -name "*.mp3" | xargs cat >> "${filename}"
 mp3val "${filename}" -f -nb > /dev/null 2>&1
 
