@@ -71,11 +71,11 @@ shift $(( OPTIND-1 ))
 tmp_dir=`mktemp -d 2>/dev/null || mktemp -d -t "${me}"`
 trap 'rm -rf "${tmp_dir}"' EXIT
 
-function encode {
-	tmp_out="${tmp_dir}/l_${2}_.aiff"
-	say --voice="${voice}" --rate="${rate}" --output-file="${tmp_out}" "$1"
-	lame --quiet -q 0 -v -V "${quality}" "${tmp_out}" "${tmp_out}.mp3"
-	rm "${tmp_out}"
+function tts_mp3 {
+	local input="$1"
+	local output="$2"
+	say --voice="${voice}" --rate="${rate}" --output-file="${output}.aiff" "${input}"
+	lame --quiet -q 0 -v -V "${quality}" "${output}.aiff" "${output}" && rm "${output}.aiff"
 }
 
 k=0
@@ -83,13 +83,13 @@ i=0
 while read line;
 do
 	[ -z "$line" ] && continue
-	(encode "${line}" "${k}" >&2 & wait %1; echo $?) &
+	(tts_mp3 "${line}" "${tmp_dir}/l_${k}_.mp3" >&2 & wait %1; echo $?) &
 	if (( $k % 10 == 0 )); then wait; fi # LIMIT TO 10 sub processes
 	k=$((k + 1))
 done < "${1:-/dev/stdin}" | grep -qv 0 && exit 1
 
 > "${filename}"
-find "${tmp_dir}" -name "*.mp3" | sort -n -t _ -k 3 | xargs cat >> "${filename}"
+find "${tmp_dir}" -name "*.mp3" | sort -n -t _ -k 2 | xargs cat >> "${filename}"
 mp3val "${filename}" -f -nb > /dev/null 2>&1
 
 exit 1
