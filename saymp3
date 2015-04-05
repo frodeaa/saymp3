@@ -62,10 +62,21 @@ shift $(( OPTIND-1 ))
 # say line to aiff
 # lame -q 0 -v -V <quality> file.aiff file.mp3
 
-while read line
+tmp_dir=`mktemp -d 2>/dev/null || mktemp -d -t "${me}"`
+#trap 'rm -rf "${tmp_dir}"' EXIT
+tmp_dir="/var/folders/9y/m3wsy91d3zz7_ymgpffwhsbh0000gn/T/saymp3.LoMgmqm7"
+count=0
+while read line;
 do
-  echo "$line"
+	tmp_out="${tmp_dir}/${count}"
+	say -v "${voice}" -r "${rate}" -o "${tmp_out}.aiff" ${line}
+	lame -S -q 0 -v -V "${quality}" "${tmp_out}.aiff" "${tmp_out}.mp3"
+  	rm "${tmp_out}.aiff"
+  	count=$((count + 1))
 done < "${1:-/dev/stdin}"
+
+find "${tmp_dir}" -name "*.mp3" | xargs cat >> "${filename}"
+mp3val "${filename}" -f -nb
 
 exit 1
 
