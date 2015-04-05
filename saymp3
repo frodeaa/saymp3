@@ -85,7 +85,7 @@ do
 done < "${1:-/dev/stdin}"
 
 rm "${filename}"
-find "${tmp_dir}" -name "*.mp3" | xargs cat >> "${filename}"
+find "${tmp_dir}" -name "*.mp3" | sort | xargs cat >> "${filename}"
 mp3val "${filename}" -f -nb > /dev/null 2>&1
 
 exit 1
