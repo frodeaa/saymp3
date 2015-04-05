@@ -20,7 +20,6 @@ options:
   -r, -r=200         speech rate to be used, in words per minute.
   -V, -V=4           quality settings for VBR, 0=highest, 9=smaller file
   -o, o=out.mp3      output filename
-  -p                 show progress
   -h                 show help
 EOF
 	exit 1
