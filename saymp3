@@ -62,17 +62,22 @@ shift $(( OPTIND-1 ))
 tmp_dir=`mktemp -d 2>/dev/null || mktemp -d -t "${me}"`
 trap 'rm -rf "${tmp_dir}"' EXIT
 
+function encode {
+	tmp_out="${tmp_dir}/${2}.aiff"
+	say -v "${voice}" -r "${rate}" -o "${tmp_out}" "$1"
+	lame --quiet -q 0 -v -V "${quality}" "${tmp_out}" "${tmp_out}.mp3"
+	rm "${tmp_out}"
+}
+
 k=0
 i=0
 while read line;
 do
 	[ -z "$line" ] && continue
-	tmp_out="${tmp_dir}/${k}.aiff"
-	say -v "${voice}" -r "${rate}" -o "${tmp_out}" ${line}
-	lame --quiet -q 0 -v -V "${quality}" "${tmp_out}" "${tmp_out}.mp3"
-	rm "${tmp_out}"
+	(encode "${line}" "${k}" >&2 & wait %1; echo $?) &
+	if (( $k % 10 == 0 )); then wait; fi # LIMIT TO 10 sub processes
 	k=$((k + 1))
-done < "${1:-/dev/stdin}"
+done < "${1:-/dev/stdin}" | grep -qv 0 && exit 1
 
 rm "${filename}"
 find "${tmp_dir}" -name "*.mp3" | sort | xargs cat >> "${filename}"
