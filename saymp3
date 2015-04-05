@@ -87,7 +87,7 @@ i=0
 while read line;
 do
 	[ -z "$line" ] && continue
-	(tts_mp3 "${line}" "${tmp_dir}/l_${k}_.mp3" >&2 & wait %1; echo $?) &
+	(tts_mp3 ". ${line}" "${tmp_dir}/l_${k}_.mp3" >&2 & wait %1; echo $?) &
 	if (( $k % 10 == 0 )); then wait; fi # LIMIT TO 10 sub processes
 	k=$((k + 1))
 done < "${1:-/dev/stdin}" | grep -qv 0 && exit 1
