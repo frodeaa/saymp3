@@ -20,19 +20,26 @@ options:
   -r, -r=200         speech rate to be used, in words per minute.
   -V, -V=4           quality settings for VBR, 0=highest, 9=smaller file
   -o, o=out.mp3      output filename
+  -p                 show progress
   -h                 show help
 EOF
 	exit 1
 }
 
+function progress {
+	local spin='-\|/'
+	echo -ne "${spin:$1:1} encode line $2\r"
+}
+
 set -e
 
+show_progress=false
 voice="alex"
 rate="200"
 quality="4"
 filename="out.mp3"
 
-while getopts "hv:r:V:o:" opt; do
+while getopts "hpv:r:V:o:" opt; do
 	case ${opt} in
 		h)
 			usage
@@ -49,6 +56,9 @@ while getopts "hv:r:V:o:" opt; do
 		o)
 			filename=${OPTARG}
 			;;
+		p)
+			show_progress=true
+			;;
 		:)
 			echo "option -$OPTARG requires an argument." >&2
 			exit 1
@@ -62,9 +72,11 @@ tmp_dir=`mktemp -d 2>/dev/null || mktemp -d -t "${me}"`
 trap 'rm -rf "${tmp_dir}"' EXIT
 
 k=0
+i=0
 while read line;
 do
 	[ -z "$line" ] && continue
+	if $show_progress ; then i=$(( (i+1) %4 )) && progress $i $k; fi
 	tmp_out="${tmp_dir}/${k}.aiff"
 	say -v "${voice}" -r "${rate}" -o "${tmp_out}" ${line}
 	lame --quiet -q 0 -v -V "${quality}" "${tmp_out}" "${tmp_out}.mp3"
