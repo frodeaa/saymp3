@@ -79,7 +79,7 @@ do
 	k=$((k + 1))
 done < "${1:-/dev/stdin}" | grep -qv 0 && exit 1
 
-rm "${filename}"
+> "${filename}"
 find "${tmp_dir}" -name "*.mp3" | sort | xargs cat >> "${filename}"
 mp3val "${filename}" -f -nb > /dev/null 2>&1
 
