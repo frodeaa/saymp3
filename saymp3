@@ -14,7 +14,7 @@ version="${me} version 0.1"
 
 function usage {
 	cat <<EOF
-usage: ${me} [-v voice] [-r rate] [-V quality] [-o output] [file...]
+usage: ${me} [-s voice] [-r rate] [-q quality] [-o output] [file...]
 
 create mp3 audio files from text input
 
@@ -23,6 +23,7 @@ options:
   -r, -r=200         speech rate to be used, in words per minute.
   -q, -q=4           quality settings for VBR, 0=highest, 9=smaller file
   -o, o=out.mp3      output filename
+  -v                 show version
   -h                 show help
 EOF
 	exit 1

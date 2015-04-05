@@ -2,13 +2,16 @@
 
 A text to mp3 tool
 
-    usage: saymp3 [-v voice] [-r rate] [-V quality] [-o output] [file...]
+    usage: saymp3 [-s voice] [-r rate] [-q quality] [-o output] [file...]
+
+    create mp3 audio files from text input
 
     options:
-      -v, -v=alex        specify the voice to be used.
+      -s, -s=alex        specify the voice to be used.
       -r, -r=200         speech rate to be used, in words per minute.
-      -V, -V=4           quality settings for VBR, 0=highest, 9=smaller file
+      -q, -q=4           quality settings for VBR, 0=highest, 9=smaller file
       -o, o=out.mp3      output filename
+      -v                 show version
       -h                 show help
 
 
