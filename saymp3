@@ -7,9 +7,10 @@
 #
 # Example:
 #
-#  $ cat book.txt | saymp3 -v alex -r 200 -o book.mp3
+#  $ cat book.txt | saymp3 -s alex -r 200 -o book.mp3
 
 me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
+version="${me} version 0.1"
 
 function usage {
 	cat <<EOF
@@ -18,9 +19,9 @@ usage: ${me} [-v voice] [-r rate] [-V quality] [-o output] [file...]
 create mp3 audio files from text input
 
 options:
-  -v, -v=alex        specify the voice to be used.
+  -s, -s=alex        specify the voice to be used.
   -r, -r=200         speech rate to be used, in words per minute.
-  -V, -V=4           quality settings for VBR, 0=highest, 9=smaller file
+  -q, -q=4           quality settings for VBR, 0=highest, 9=smaller file
   -o, o=out.mp3      output filename
   -h                 show help
 EOF
@@ -42,18 +43,21 @@ rate="200"
 quality="4"
 filename="out.mp3"
 
-while getopts "hpv:r:V:o:" opt; do
+while getopts "hvs:r:q:o:" opt; do
 	case ${opt} in
 		h)
 			usage
 			;;
 		v)
+			echo "${version}" && exit 0
+			;;
+		s)
 			voice=${OPTARG}
 			;;
 		r)
 			rate=${OPTARG}
 			;;
-		V)
+		q)
 			quality=${OPTARG}
 			;;
 		o)
@@ -91,6 +95,3 @@ done < "${1:-/dev/stdin}" | grep -qv 0 && exit 1
 > "${filename}"
 find "${tmp_dir}" -name "*.mp3" | sort -n -t _ -k 3 | xargs cat >> "${filename}"
 mp3val "${filename}" -f -nb > /dev/null 2>&1
-
-exit 1
-
