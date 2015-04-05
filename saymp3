@@ -64,7 +64,7 @@ trap 'rm -rf "${tmp_dir}"' EXIT
 
 function encode {
 	tmp_out="${tmp_dir}/${2}.aiff"
-	say -v "${voice}" -r "${rate}" -o "${tmp_out}" "$1"
+	say --voice="${voice}" --rate="${rate}" --output-file="${tmp_out}" "$1"
 	lame --quiet -q 0 -v -V "${quality}" "${tmp_out}" "${tmp_out}.mp3"
 	rm "${tmp_out}"
 }
