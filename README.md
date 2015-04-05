@@ -14,7 +14,7 @@ A text to mp3 tool
 
 ## Example
 
-    cat book.txt | saymp3 -v=alex r=200 -V=4 -o book.mp3
+    cat book.txt | saymp3 -s=alex r=200 -q=4 -o book.mp3
 
 ## Install
 
