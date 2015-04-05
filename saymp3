@@ -14,7 +14,7 @@ version="${me} version 0.1.0"
 
 voice="alex"
 rate="175"
-quality="-q 0 --abr 56 -mm"
+quality="-q 0 -v -V 9 -mm -B 32"
 filename="out.mp3"
 
 function usage {
