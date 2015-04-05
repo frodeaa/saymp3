@@ -63,7 +63,7 @@ tmp_dir=`mktemp -d 2>/dev/null || mktemp -d -t "${me}"`
 trap 'rm -rf "${tmp_dir}"' EXIT
 
 function encode {
-	tmp_out="${tmp_dir}/${2}.aiff"
+	tmp_out="${tmp_dir}/l_${2}_.aiff"
 	say --voice="${voice}" --rate="${rate}" --output-file="${tmp_out}" "$1"
 	lame --quiet -q 0 -v -V "${quality}" "${tmp_out}" "${tmp_out}.mp3"
 	rm "${tmp_out}"
@@ -80,7 +80,7 @@ do
 done < "${1:-/dev/stdin}" | grep -qv 0 && exit 1
 
 > "${filename}"
-find "${tmp_dir}" -name "*.mp3" | sort | xargs cat >> "${filename}"
+find "${tmp_dir}" -name "*.mp3" | sort -n -t _ -k 2 | xargs cat >> "${filename}"
 mp3val "${filename}" -f -nb > /dev/null 2>&1
 
 exit 1
