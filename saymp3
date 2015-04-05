@@ -26,14 +26,8 @@ EOF
 	exit 1
 }
 
-function progress {
-	local spin='-\|/'
-	echo -ne "${spin:$1:1} encode line $2\r"
-}
-
 set -e
 
-show_progress=false
 voice="alex"
 rate="200"
 quality="4"
@@ -56,9 +50,6 @@ while getopts "hpv:r:V:o:" opt; do
 		o)
 			filename=${OPTARG}
 			;;
-		p)
-			show_progress=true
-			;;
 		:)
 			echo "option -$OPTARG requires an argument." >&2
 			exit 1
@@ -76,7 +67,6 @@ i=0
 while read line;
 do
 	[ -z "$line" ] && continue
-	if $show_progress ; then i=$(( (i+1) %4 )) && progress $i $k; fi
 	tmp_out="${tmp_dir}/${k}.aiff"
 	say -v "${voice}" -r "${rate}" -o "${tmp_out}" ${line}
 	lame --quiet -q 0 -v -V "${quality}" "${tmp_out}" "${tmp_out}.mp3"
