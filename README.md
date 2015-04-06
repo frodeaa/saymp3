@@ -23,9 +23,12 @@ A text to mp3 tool
 ## Dependencies
 
  - lame
- - mp3val
+ - mp3Val
 
-     $ brew install lame mp3val
+You can install the dependencies with homebrew:
+
+    $ brew install lame mp3val
+
 
 ## Install
 
