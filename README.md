@@ -1,4 +1,4 @@
-# saymp3
+# saymp3 -- tts mp3
 
 A text to mp3 tool
 
@@ -19,6 +19,13 @@ A text to mp3 tool
 ## Example
 
     cat book.txt | saymp3 -s alex -r 175 -o book.mp3
+
+## Dependencies
+
+ - lame
+ - mp3val
+
+     $ brew install lame mp3val
 
 ## Install
 
