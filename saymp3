@@ -77,6 +77,8 @@ shift $(( OPTIND-1 ))
 tmp_dir=`mktemp -d 2>/dev/null || mktemp -d -t "${me}"`
 trap 'rm -rf "${tmp_dir}"' EXIT
 
+> "${filename}"
+
 function tts_mp3 {
 	local input="$1"
 	local output="$2"
@@ -94,6 +96,5 @@ do
 	k=$((k + 1))
 done < "${1:-/dev/stdin}" | grep -qv 0 && exit 1
 
-> "${filename}"
 find "${tmp_dir}" -name "*.mp3" | sort -n -t _ -k 3 | xargs cat >> "${filename}"
 mp3val "${filename}" -f -nb > /dev/null 2>&1
