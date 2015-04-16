@@ -17,6 +17,7 @@ rate="175"
 quality="-q 0 -v -V 9 -mm -B 32"
 filename="out.mp3"
 lame_title=""
+lame_image=""
 
 function usage {
 	cat <<EOF
@@ -30,7 +31,8 @@ options:
   -q, -q "${quality}"
                      quality settings, see lame options (lame --longhelp)
   -o, -o ${filename}     output filename
-  -t <title>         audio/song title
+  -t <title>         title
+  -i <file>          albumArt
   -v                 show version
   -h                 show help
 EOF
@@ -47,7 +49,7 @@ requires_command say
 requires_command lame
 requires_command mp3val
 
-while getopts "hvs:r:q:o:t:" opt; do
+while getopts "hvs:r:q:o:t:i:" opt; do
 	case ${opt} in
 		h)
 			usage
@@ -70,9 +72,15 @@ while getopts "hvs:r:q:o:t:" opt; do
 		t)
 			lame_title="${OPTARG}"
 			;;
+		i)
+			if [ -f "${OPTARG}" ]; then
+				lame_image="${OPTARG}"
+			else
+				echo "${OPTARG} is not a file" >&2 && exit 1
+			fi
+			;;
 		:)
-			echo "option -$OPTARG requires an argument." >&2
-			exit 1
+			echo "option -$OPTARG requires an argument." >&2 && exit 1
 		;;
 	esac
 done
@@ -107,4 +115,9 @@ mp3val "${filename}" -f -nb > /dev/null 2>&1
 if [ ! -z "$lame_title" ]; then
 	tmp_wmeta="${tmp_dir}/${filename}"
 	lame --tt "$lame_title" --silent --add-id3v2 "${filename}" "${tmp_wmeta}" && mv "${tmp_wmeta}" "${filename}";
+fi
+
+if [ ! -z "$lame_image" ]; then
+	tmp_wmeta="${tmp_dir}/${filename}"
+	lame --ti "$lame_image" --silent --add-id3v2 "${filename}" "${tmp_wmeta}" && mv "${tmp_wmeta}" "${filename}";
 fi
