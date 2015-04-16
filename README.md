@@ -12,6 +12,8 @@ A text to mp3 tool
       -q, -q "-q 0 -v -V 9 -mm -B 32"
                          quality settings, see lame options (lame --longhelp)
       -o, -o out.mp3     output filename
+      -t <title>         title
+      -i <file>          albumArt
       -v                 show version
       -h                 show help
 
