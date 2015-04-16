@@ -16,8 +16,7 @@ voice="alex"
 rate="175"
 quality="-q 0 -v -V 9 -mm -B 32"
 filename="out.mp3"
-lame_title=""
-lame_image=""
+lame_id3_opts=""
 
 function usage {
 	cat <<EOF
@@ -70,11 +69,11 @@ while getopts "hvs:r:q:o:t:i:" opt; do
 			filename=${OPTARG}
 			;;
 		t)
-			lame_title="${OPTARG}"
+			lame_id3_opts="${lame_id3_opts} --t${opt} \"${OPTARG}\""
 			;;
 		i)
 			if [ -f "${OPTARG}" ]; then
-				lame_image="${OPTARG}"
+				lame_id3_opts="${lame_id3_opts} --t${opt} \"${OPTARG}\""
 			else
 				echo "${OPTARG} is not a file" >&2 && exit 1
 			fi
@@ -112,12 +111,9 @@ done < "${1:-/dev/stdin}" | grep -qv 0 && exit 1
 find "${tmp_dir}" -name "*.mp3" | sort -n -t _ -k 3 | xargs cat >> "${filename}"
 mp3val "${filename}" -f -nb > /dev/null 2>&1
 
-if [ ! -z "$lame_title" ]; then
-	tmp_wmeta="${tmp_dir}/${filename}"
-	lame --tt "$lame_title" --silent --add-id3v2 "${filename}" "${tmp_wmeta}" && mv "${tmp_wmeta}" "${filename}";
-fi
-
-if [ ! -z "$lame_image" ]; then
-	tmp_wmeta="${tmp_dir}/${filename}"
-	lame --ti "$lame_image" --silent --add-id3v2 "${filename}" "${tmp_wmeta}" && mv "${tmp_wmeta}" "${filename}";
+if [ ! -z "$lame_id3_opts" ]; then
+	tmp_wmeta="${tmp_dir}/wmeta_${filename}"
+	lame_id3_opts="${lame_id3_opts} --silent --add-id3v2"
+	eval "lame${lame_id3_opts} "${filename}" "${tmp_wmeta}";"
+	mv "${tmp_wmeta}" "${filename}"
 fi
