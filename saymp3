@@ -17,6 +17,13 @@ rate="175"
 quality="-q 0 -v -V 9 -mm -B 32"
 filename="out.mp3"
 lame_id3_opts=""
+debug=
+
+debug() {
+	if [ -n "$debug" ]; then
+		printf "%s\n" "$*" >&2
+	fi
+}
 
 function usage {
 	cat <<EOF
@@ -34,6 +41,7 @@ options:
   -i <file>          albumArt
   -v                 show version
   -h                 show help
+  -d                 show debug messages
 EOF
 	exit 1
 }
@@ -48,10 +56,13 @@ requires_command say
 requires_command lame
 requires_command mp3val
 
-while getopts "hvs:r:q:o:t:i:" opt; do
+while getopts "hvsd:r:q:o:t:i:" opt; do
 	case ${opt} in
 		h)
 			usage
+			;;
+		d)
+			debug=1
 			;;
 		v)
 			echo "${version}" && exit 0
@@ -83,6 +94,12 @@ while getopts "hvs:r:q:o:t:i:" opt; do
 		;;
 	esac
 done
+
+debug "voice: {$voice}"
+debug "rate: {$rate}"
+debug "quality: {$quality}"
+debug "filename: {$filename}"
+debug "lame_id3_opts: {$lame_id3_opts}"
 
 shift $(( OPTIND-1 ))
 
