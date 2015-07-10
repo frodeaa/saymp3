@@ -16,11 +16,13 @@ A text to mp3 tool
       -i <file>          albumArt
       -v                 show version
       -h                 show help
+      -d                 show debug messages
 
 
 ## Example
 
     cat book.txt | saymp3 -s alex -r 175 -o book.mp3
+    saymp3 -s alex -r 175 -o book.mp3 book.txt
 
 ## Dependencies
 

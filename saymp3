@@ -12,7 +12,7 @@
 #
 
 me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
-version="${me} version 0.3.0"
+version="${me} version 0.3.1"
 
 voice="alex"
 rate="175"
@@ -94,7 +94,7 @@ requires_command say
 requires_command lame
 requires_command mp3val
 
-while getopts "hvsd:r:q:o:t:i:" opt; do
+while getopts "dhvs:r:q:o:t:i:" opt; do
 	case ${opt} in
 		h)
 			usage
