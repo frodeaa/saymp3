@@ -55,6 +55,12 @@ tts_by_line() {
     set -x
 }
 
+merge_mp3_files() {
+    local output="$1"
+    find "${tmp_dir}" -name "*.mp3" | sort -n -t _ -k 3 | xargs cat >> "${output}"
+    mp3val "${output}" -f -nb > /dev/null 2>&1
+}
+
 usage() {
 	cat <<EOF
 usage: ${me} [-s voice] [-r rate] [-q quality] [-o output] [file...]
@@ -138,6 +144,7 @@ shift $(( OPTIND-1 ))
 text_input="${1:-/dev/stdin}"
 
 tts_by_line "${text_input}"
+merge_mp3_files "${filename}"
 
 if [ ! -z "$lame_id3_opts" ]; then
 	tmp_wmeta="${tmp_dir}/wmeta_${filename}"
