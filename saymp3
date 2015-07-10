@@ -19,12 +19,20 @@ filename="out.mp3"
 lame_id3_opts=""
 text_input=
 debug=
+tmp_dir=
 
 debug() {
 	if [ -n "$debug" ]; then
 		printf "%s\n" "$*" >&2
 	fi
 }
+
+init_tmp_dir_output() {
+    tmp_dir=`mktemp -d 2>/dev/null || mktemp -d -t "${me}"`
+    trap 'rm -rf "${tmp_dir}"' EXIT
+    > "${filename}"
+}
+
 
 usage() {
 	cat <<EOF
@@ -96,19 +104,17 @@ while getopts "hvsd:r:q:o:t:i:" opt; do
 	esac
 done
 
+init_tmp_dir_output
+
 debug "voice: {$voice}"
 debug "rate: {$rate}"
 debug "quality: {$quality}"
 debug "filename: {$filename}"
 debug "lame_id3_opts: {$lame_id3_opts}"
+debug "tmp_dir: {$tmp_dir}"
 
 shift $(( OPTIND-1 ))
 text_input="${1:-/dev/stdin}"
-
-tmp_dir=`mktemp -d 2>/dev/null || mktemp -d -t "${me}"`
-trap 'rm -rf "${tmp_dir}"' EXIT
-
-> "${filename}"
 
 tts_mp3() {
 	local input="$1"
