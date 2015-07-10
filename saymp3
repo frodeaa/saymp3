@@ -8,6 +8,8 @@
 # Example:
 #
 #  $ cat book.txt | saymp3 -s alex -r 175 -o book.mp3
+#  $ saymp3 -s alex -r 175 -o book.mp3 book.txt
+#
 
 me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 version="${me} version 0.3.0"
