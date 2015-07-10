@@ -17,6 +17,7 @@ rate="175"
 quality="-q 0 -v -V 9 -mm -B 32"
 filename="out.mp3"
 lame_id3_opts=""
+text_input=
 debug=
 
 debug() {
@@ -102,6 +103,7 @@ debug "filename: {$filename}"
 debug "lame_id3_opts: {$lame_id3_opts}"
 
 shift $(( OPTIND-1 ))
+text_input="${1:-/dev/stdin}"
 
 tmp_dir=`mktemp -d 2>/dev/null || mktemp -d -t "${me}"`
 trap 'rm -rf "${tmp_dir}"' EXIT
@@ -123,7 +125,7 @@ do
 	(tts_mp3 ". ${line}" "${tmp_dir}/l_${k}_.mp3" >&2 & wait %1; echo $?) &
 	if (( $k % 10 == 0 )); then wait; fi # LIMIT TO 10 sub processes
 	k=$((k + 1))
-done < "${1:-/dev/stdin}" | grep -qv 0 && exit 1
+done < "${text_input}" | grep -qv 0 && exit 1
 
 find "${tmp_dir}" -name "*.mp3" | sort -n -t _ -k 3 | xargs cat >> "${filename}"
 mp3val "${filename}" -f -nb > /dev/null 2>&1
