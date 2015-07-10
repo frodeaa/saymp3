@@ -43,7 +43,7 @@ tts_mp3() {
 }
 
 tts_by_line() {
-    set +x
+    set +e
     local k=0
     local i=0
     local lines="$1"
@@ -54,7 +54,7 @@ tts_by_line() {
         if (( $k % 10 == 0 )); then wait; fi # LIMIT TO 10 sub processes
         k=$((k + 1))
     done < ${lines} | grep -qv 0 && exit 1
-    set -x
+    set -e
 }
 
 merge_mp3_files() {
