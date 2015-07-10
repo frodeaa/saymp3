@@ -40,6 +40,21 @@ tts_mp3() {
 	lame --quiet ${quality} "${output}.aiff" "${output}" && rm "${output}.aiff"
 }
 
+tts_by_line() {
+    set +x
+    local k=0
+    local i=0
+    local lines="$1"
+    while read line;
+    do
+        [ -z "$line" ] && continue
+        (tts_mp3 ". ${line}" "${tmp_dir}/l_${k}_.mp3" >&2 & wait %1; echo $?) &
+        if (( $k % 10 == 0 )); then wait; fi # LIMIT TO 10 sub processes
+        k=$((k + 1))
+    done < ${lines} | grep -qv 0 && exit 1
+    set -x
+}
+
 usage() {
 	cat <<EOF
 usage: ${me} [-s voice] [-r rate] [-q quality] [-o output] [file...]
@@ -122,18 +137,7 @@ debug "tmp_dir: {$tmp_dir}"
 shift $(( OPTIND-1 ))
 text_input="${1:-/dev/stdin}"
 
-k=0
-i=0
-while read line;
-do
-	[ -z "$line" ] && continue
-	(tts_mp3 ". ${line}" "${tmp_dir}/l_${k}_.mp3" >&2 & wait %1; echo $?) &
-	if (( $k % 10 == 0 )); then wait; fi # LIMIT TO 10 sub processes
-	k=$((k + 1))
-done < "${text_input}" | grep -qv 0 && exit 1
-
-find "${tmp_dir}" -name "*.mp3" | sort -n -t _ -k 3 | xargs cat >> "${filename}"
-mp3val "${filename}" -f -nb > /dev/null 2>&1
+tts_by_line "${text_input}"
 
 if [ ! -z "$lame_id3_opts" ]; then
 	tmp_wmeta="${tmp_dir}/wmeta_${filename}"
