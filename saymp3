@@ -33,6 +33,12 @@ init_tmp_dir_output() {
     > "${filename}"
 }
 
+tts_mp3() {
+	local input="$1"
+	local output="$2"
+	say --voice="${voice}" --rate="${rate}" --output-file="${output}.aiff" "${input}"
+	lame --quiet ${quality} "${output}.aiff" "${output}" && rm "${output}.aiff"
+}
 
 usage() {
 	cat <<EOF
@@ -115,13 +121,6 @@ debug "tmp_dir: {$tmp_dir}"
 
 shift $(( OPTIND-1 ))
 text_input="${1:-/dev/stdin}"
-
-tts_mp3() {
-	local input="$1"
-	local output="$2"
-	say --voice="${voice}" --rate="${rate}" --output-file="${output}.aiff" "${input}"
-	lame --quiet ${quality} "${output}.aiff" "${output}" && rm "${output}.aiff"
-}
 
 k=0
 i=0
