@@ -58,9 +58,11 @@ tts_by_line() {
 }
 
 merge_mp3_files() {
-    local output="$1"
-    find "${tmp_dir}" -name "*.mp3" | sort -n -t _ -k 3 | xargs cat >> "${output}"
-    mp3val "${output}" -f -nb > /dev/null 2>&1
+	local output="$1"
+	find "${tmp_dir}" -name "*.mp3" |\
+		sort --numeric-sort --field-separator=_ --key=3 |\
+		xargs cat >> "${output}"
+	mp3val "${output}" -f -nb > /dev/null 2>&1
 }
 
 usage() {
