@@ -14,7 +14,7 @@
 me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 version="${me} version 0.3.1"
 
-voice="alex"
+voice="daniel"
 rate="175"
 quality="-q 0 -v -V 9 -mm -B 32"
 filename="out.mp3"
