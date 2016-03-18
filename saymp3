@@ -46,7 +46,7 @@ tts_by_line() {
 	set +e
 	local k=0
 	local lines="$1"
-	while read line;
+	while read -r line;
 	do
 		[ -z "$line" ] && continue
 		(tts_mp3 ". ${line}" "${tmp_dir}/l_${k}_.mp3" >&2 & wait %1; echo $?) &
