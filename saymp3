@@ -54,7 +54,7 @@ tts_by_line() {
 			wait; # LIMIT TO 10 sub processes
 		fi
 		k=$((k + 1))
-	done < ${lines} | grep -qv 0 && exit 1
+	done < "${lines}" | grep -qv 0 && exit 1
 	set -e
 }
 
