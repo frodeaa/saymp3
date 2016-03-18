@@ -50,7 +50,7 @@ tts_by_line() {
 	do
 		[ -z "$line" ] && continue
 		(tts_mp3 ". ${line}" "${tmp_dir}/l_${k}_.mp3" >&2 & wait %1; echo $?) &
-		if (( $k % 10 == 0 )); then
+		if (( k % 10 == 0 )); then
 			wait; # LIMIT TO 10 sub processes
 		fi
 		k=$((k + 1))
