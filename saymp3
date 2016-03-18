@@ -16,7 +16,6 @@ version="${me} version 0.3.1"
 
 voice="daniel"
 rate="175"
-quality="-q 0 -v -V 9 -mm -B 32"
 filename="out.mp3"
 lame_id3_opts=""
 text_input=
@@ -39,7 +38,7 @@ tts_mp3() {
 	local input="$1"
 	local output="$2"
 	say --voice="${voice}" --rate="${rate}" --output-file="${output}.aiff" "${input}"
-	lame --quiet ${quality} "${output}.aiff" "${output}" && rm "${output}.aiff"
+	lame --quiet -q 0 -v -V 9 -mm -B 32 "${output}.aiff" "${output}" && rm "${output}.aiff"
 }
 
 tts_by_line() {
@@ -68,15 +67,13 @@ merge_mp3_files() {
 
 usage() {
 	cat <<EOF
-usage: ${me} [-s voice] [-r rate] [-q quality] [-o output] [file...]
+usage: ${me} [-s voice] [-r rate] [-o output] [file...]
 
 create mp3 audio files from text input
 
 options:
   -s, -s ${voice}        specify the voice to be used.
   -r, -r ${rate}         speech rate to be used, in words per minute.
-  -q, -q "${quality}"
-                     quality settings, see lame options (lame --longhelp)
   -o, -o ${filename}     output filename
   -t <title>         title
   -i <file>          albumArt
@@ -115,9 +112,6 @@ while getopts "dhvs:r:q:o:t:i:" opt; do
 		r)
 			rate=${OPTARG}
 			;;
-		q)
-			quality=${OPTARG}
-			;;
 		o)
 			filename=${OPTARG}
 			;;
@@ -141,7 +135,6 @@ init_tmp_dir_output
 
 debug "voice: {$voice}"
 debug "rate: {$rate}"
-debug "quality: {$quality}"
 debug "filename: {$filename}"
 debug "lame_id3_opts: {$lame_id3_opts}"
 debug "tmp_dir: {$tmp_dir}"
