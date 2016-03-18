@@ -45,7 +45,6 @@ tts_mp3() {
 tts_by_line() {
 	set +e
 	local k=0
-	local i=0
 	local lines="$1"
 	while read line;
 	do
