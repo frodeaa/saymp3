@@ -148,6 +148,6 @@ merge_mp3_files "${filename}"
 if [ ! -z "$lame_id3_opts" ]; then
 	tmp_wmeta="${tmp_dir}/wmeta_${filename}"
 	lame_id3_opts="${lame_id3_opts} --silent --add-id3v2"
-	eval "lame${lame_id3_opts} "${filename}" "${tmp_wmeta}";"
+	eval "lame${lame_id3_opts} ${filename} ${tmp_wmeta};"
 	mv "${tmp_wmeta}" "${filename}"
 fi
