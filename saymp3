@@ -30,7 +30,7 @@ debug() {
 }
 
 init_tmp_dir_output() {
-	tmp_dir=`mktemp -d 2>/dev/null || mktemp -d -t "${me}"`
+	tmp_dir=$(mktemp -d 2>/dev/null || mktemp -d -t "${me}")
 	trap 'rm -rf "${tmp_dir}"' EXIT
 	> "${filename}"
 }
